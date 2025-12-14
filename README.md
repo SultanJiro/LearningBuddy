@@ -1,70 +1,109 @@
-# Getting Started with Create React App
+# 🤖 Learning Buddy Chatbot
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+_Learning Buddy_ adalah chatbot edukasi berbasis _Retrieval-Augmented Generation (RAG)_ yang dirancang sebagai teman belajar interaktif.
 
-## Available Scripts
+Proyek ini menggabungkan kecerdasan _Generative AI (via Groq)_ dengan akurasi data lokal menggunakan _Semantic Search (FAISS)_, sehingga jawaban yang diberikan tidak hanya luwes (seperti manusia), tetapi juga faktual sesuai materi pembelajaran.
 
-In the project directory, you can run:
+Dikembangkan sebagai bagian dari _Capstone Project_.
 
-### `npm start`
+## 🎯 Tujuan Proyek
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- Menyediakan virtual learning companion yang responsif dan cerdas.
+- Mengimplementasikan arsitektur _RAG_ untuk meminimalisir halusinasi AI.
+- Memberikan jawaban yang natural menggunakan _Large Language Model (LLM)_.
+- Menyediakan akses publik ke development local menggunakan _Ngrok Tunneling_.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 🧠 Teknologi yang Digunakan
 
-### `npm test`
+### AI & Machine Learning Core
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- _Groq API_ (Inference Engine untuk LLM Llama 3 / Mixtral) - Generator Jawaban
+- _Sentence Transformers_ (Semantic Embedding) - Pemahaman Konteks
+- _FAISS_ (Vector Database) - Pencarian Cepat
+- _Pandas & NumPy_ (Data Processing)
 
-### `npm run build`
+### Backend & Infrastructure
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- _Python 3_ (FastAPI)
+- _Ngrok_ (Secure Tunneling untuk akses publik)
+- _Git & GitHub_
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Frontend
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- HTML, CSS, JavaScript (React)
 
-### `npm run eject`
+## ⚙ Alur Kerja Model (RAG Architecture)
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Sistem tidak sekadar mencocokkan kata kunci, tetapi memahami makna dan menyusun kalimat baru.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+1.  _Input:_ User mengirim pertanyaan.
+2.  _Retrieval:_ Sistem mengubah pertanyaan jadi vektor, lalu mencari potongan materi paling relevan di _FAISS_.
+3.  _Augmentation:_ Pertanyaan User + Materi Relevan digabung menjadi satu Prompt.
+4.  _Generation:_ Prompt dikirim ke _Groq API_.
+5.  _Response:_ Groq menjawab pertanyaan user berdasarkan materi yang ditemukan.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 🧩 Arsitektur Sistem
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Menggunakan arsitektur _Client–Server_ dengan _Ngrok_ sebagai jembatan akses.
 
-## Learn More
+User (Browser)
+⬇
+🌐 Internet
+⬇
+🚇 Ngrok Tunnel ([https://xxxx.ngrok-free.app](https://xxxx.ngrok-free.app))
+⬇
+💻 Backend Server (Localhost)
+⬇ ➡ (Cari Data) ➡ 🗄 FAISS
+⬇ ⬅ (Dapat Konteks) ⬅
+🧠 Groq API (Cloud LLM)
+⬇
+💬 Jawaban Final ke User
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+🚀 Cara Menjalankan Aplikasi
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### 1️⃣ Setup Backend
 
-### Code Splitting
+Masuk ke folder backend dan install dependencies:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+cd backend
+pip install -r requirements.txt
 
-### Analyzing the Bundle Size
+Buat file .env dan masukkan API Key Groq:
+GROQ_API_KEY=gsk_xxxxxxxxxxxxxxxxxxxxxxxx
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Jalankan server:
 
-### Making a Progressive Web App
+python app.py
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Backend berjalan di http://localhost:5000 (atau port 8000 jika FastAPI).
 
-### Advanced Configuration
+### 2️⃣ Aktifkan Ngrok (Wajib)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Buka terminal baru, jalankan Ngrok sesuai port backend:
 
-### Deployment
+ngrok http 5000
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+Copy URL yang muncul (contoh: https://abcd-123.ngrok-free.app).
 
-### `npm run build` fails to minify
+### 3️⃣ Setup Frontend
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+1. buka folder project
+2. buka terminal vscode
+3. ketik npm install
+4. lalu npm start
+
+### 4️⃣ Mulai Chat
+
+Buka file frontend/index.html di browser, dan Learning Buddy siap digunakan!
+
+📌 Catatan Penting
+
+1. Groq & Internet: Chatbot membutuhkan koneksi internet stabil untuk menghubungi API Groq.
+2. Ngrok Session: URL Ngrok versi gratis akan berubah setiap kali dimatikan. Pastikan update URL di frontend setiap menjalankan ulang.
+3. Batas Konteks: Jawaban AI dibatasi oleh informasi yang ada dalam dataset pembelajaran.
+
+👨‍🎓 Author
+Team Capstone Learning Buddy (A25-CS185)
+
+📄 Lisensi
+Project ini dibuat untuk keperluan akademik dan pembelajaran.
