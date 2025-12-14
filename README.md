@@ -104,6 +104,10 @@ Buka file frontend/index.html di browser, dan Learning Buddy siap digunakan!
 2. Ngrok Session: URL Ngrok versi gratis akan berubah setiap kali dimatikan. Pastikan update URL di frontend setiap menjalankan ulang.
 3. Batas Konteks: Jawaban AI dibatasi oleh informasi yang ada dalam dataset pembelajaran.
 
+## gdrive model ML
+
+https://drive.google.com/drive/folders/17H4xpizwjghD4T_FoyeUz_f37rUIAs4w?usp=sharing
+
 👨‍🎓 Author
 Team Capstone Learning Buddy (A25-CS185)
 
