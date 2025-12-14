@@ -1,32 +1,33 @@
 # 🤖 Learning Buddy Chatbot
 
-_Learning Buddy_ adalah chatbot edukasi berbasis _Retrieval-Augmented Generation (RAG)_ yang dirancang sebagai teman belajar interaktif.
+Learning Buddy adalah chatbot edukasi berbasis Retrieval-Augmented Generation (RAG) yang dirancang sebagai teman belajar interaktif.
 
-Proyek ini menggabungkan kecerdasan _Generative AI (via Groq)_ dengan akurasi data lokal menggunakan _Semantic Search (FAISS)_, sehingga jawaban yang diberikan tidak hanya luwes (seperti manusia), tetapi juga faktual sesuai materi pembelajaran.
+Proyek ini menggabungkan kecerdasan Generative AI (via Groq) dengan akurasi data lokal menggunakan Semantic Search (FAISS), sehingga jawaban yang diberikan tidak hanya luwes (seperti manusia), tetapi juga faktual sesuai materi pembelajaran.
 
-Dikembangkan sebagai bagian dari _Capstone Project_.
+Dikembangkan sebagai bagian dari Capstone Project.
 
 ## 🎯 Tujuan Proyek
 
 - Menyediakan virtual learning companion yang responsif dan cerdas.
-- Mengimplementasikan arsitektur _RAG_ untuk meminimalisir halusinasi AI.
-- Memberikan jawaban yang natural menggunakan _Large Language Model (LLM)_.
-- Menyediakan akses publik ke development local menggunakan _Ngrok Tunneling_.
+- Mengimplementasikan arsitektur RAG untuk meminimalisir halusinasi AI.
+- Memberikan jawaban yang natural menggunakan Large Language Model (LLM).
+- Menyediakan akses publik ke development local menggunakan Ngrok Tunneling.
 
 ## 🧠 Teknologi yang Digunakan
 
 ### AI & Machine Learning Core
 
-- _Groq API_ (Inference Engine untuk LLM Llama 3 / Mixtral) - Generator Jawaban
-- _Sentence Transformers_ (Semantic Embedding) - Pemahaman Konteks
-- _FAISS_ (Vector Database) - Pencarian Cepat
-- _Pandas & NumPy_ (Data Processing)
+- Groq API (Inference Engine untuk LLM Llama 3 / Mixtral) - Generator Jawaban
+- Sentence Transformers (Semantic Embedding) - Pemahaman Konteks
+- FAISS (Vector Database) - Pencarian Cepat
+- Pandas & NumPy (Data Processing)
 
 ### Backend & Infrastructure
 
-- _Python 3_ (FastAPI)
-- _Ngrok_ (Secure Tunneling untuk akses publik)
-- _Git & GitHub_
+- Python 3 (FastAPI)
+- Ngrok (Secure Tunneling untuk akses publik)
+- Git & GitHub
+- Node.js
 
 ### Frontend
 
@@ -36,15 +37,15 @@ Dikembangkan sebagai bagian dari _Capstone Project_.
 
 Sistem tidak sekadar mencocokkan kata kunci, tetapi memahami makna dan menyusun kalimat baru.
 
-1.  _Input:_ User mengirim pertanyaan.
-2.  _Retrieval:_ Sistem mengubah pertanyaan jadi vektor, lalu mencari potongan materi paling relevan di _FAISS_.
-3.  _Augmentation:_ Pertanyaan User + Materi Relevan digabung menjadi satu Prompt.
-4.  _Generation:_ Prompt dikirim ke _Groq API_.
-5.  _Response:_ Groq menjawab pertanyaan user berdasarkan materi yang ditemukan.
+1.  Input: User mengirim pertanyaan.
+2.  Retrieval: Sistem mengubah pertanyaan jadi vektor, lalu mencari potongan materi paling relevan di FAISS.
+3.  Augmentation: Pertanyaan User + Materi Relevan digabung menjadi satu Prompt.
+4.  Generation: Prompt dikirim ke Groq API.
+5.  Response: Groq menjawab pertanyaan user berdasarkan materi yang ditemukan.
 
 ## 🧩 Arsitektur Sistem
 
-Menggunakan arsitektur _Client–Server_ dengan _Ngrok_ sebagai jembatan akses.
+Menggunakan arsitektur Client–Server dengan Ngrok sebagai jembatan akses.
 
 User (Browser)
 ⬇
@@ -68,20 +69,21 @@ Masuk ke folder backend dan install dependencies:
 cd backend
 pip install -r requirements.txt
 
-Buat file .env dan masukkan API Key Groq:
+Buat file .env dan masukkan API Key Groq dan Token Ngrok:
 GROQ_API_KEY=gsk_xxxxxxxxxxxxxxxxxxxxxxxx
+NGROK_AUTH_TOKEN=xxxxxxxx_xxxxxxxxxxxxxxxx
 
 Jalankan server:
 
 python app.py
 
-Backend berjalan di http://localhost:5000 (atau port 8000 jika FastAPI).
+Backend berjalan di http://localhost:8000
 
 ### 2️⃣ Aktifkan Ngrok (Wajib)
 
 Buka terminal baru, jalankan Ngrok sesuai port backend:
 
-ngrok http 5000
+ngrok http 8000
 
 Copy URL yang muncul (contoh: https://abcd-123.ngrok-free.app).
 
