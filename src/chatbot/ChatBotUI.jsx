@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { sendMessageToBot } from "../services/api";
 import { sendChatNotification } from "../services/notification";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import "../index.css";
 
 const INITIAL_MESSAGE = {
@@ -12,11 +14,12 @@ const INITIAL_MESSAGE = {
 };
 
 function parseQuizMessage(text) {
+  // Check format quiz (Biar fleksibel, kita biarin teks aslinya aja buat di-render Markdown nanti)
   const isQuiz = text.includes("📝 **Soal") && text.includes("A.");
-  if (!isQuiz) return { isQuiz: false, text: formatMarkdown(text), options: [] };
+  if (!isQuiz) return { isQuiz: false, text: text, options: [] };
 
   const splitIndex = text.indexOf("A.");
-  if (splitIndex === -1) return { isQuiz: false, text: formatMarkdown(text), options: [] };
+  if (splitIndex === -1) return { isQuiz: false, text: text, options: [] };
 
   const questionPart = text.substring(0, splitIndex);
   const optionsPart = text.substring(splitIndex);
@@ -32,17 +35,11 @@ function parseQuizMessage(text) {
     }
   });
 
-  const cleanQuestion = formatMarkdown(questionPart.replace(/\*\(Jawab dengan ketik.*?\)\*/s, ""));
+  const cleanQuestion = questionPart.replace(/\*\(Jawab dengan ketik.*?\)\*/s, "");
   return { isQuiz: true, text: cleanQuestion, options };
 }
 
-function formatMarkdown(text) {
-  if (!text || typeof text !== "string") return "";
-  return text
-    .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>")
-    .replace(/\*(.*?)\*/g, "<i>$1</i>")
-    .replace(/\n/g, "<br>");
-}
+// FUNGSI formatMarkdown LAMA DIHAPUS karena diganti react-markdown
 
 export default function ChatBotUI() {
   const [open, setOpen] = useState(false);
@@ -52,11 +49,11 @@ export default function ChatBotUI() {
   const [currentSessionId, setCurrentSessionId] = useState(null);
   const [messages, setMessages] = useState([INITIAL_MESSAGE]);
   const [userEmail, setUserEmail] = useState("");
-  const [showEmailInput, setShowEmailInput] = useState(false); // State Toggle Email
+  const [showEmailInput, setShowEmailInput] = useState(false);
+  const [isMaximized, setIsMaximized] = useState(false);
 
   const messagesEndRef = useRef(null);
   const isEmail = (v) => /\S+@\S+\.\S+/.test(v);
-  const [isMaximized, setIsMaximized] = useState(false);
 
   async function askAPI(userMessage) {
     try {
@@ -86,7 +83,6 @@ export default function ChatBotUI() {
     } else {
       createNewSession();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -192,13 +188,12 @@ export default function ChatBotUI() {
     }
   };
 
-  // RENDER UI
   return (
     <div className="chatbot-container">
       <AnimatePresence>
         {open && (
           <motion.div className={`chatbot-widget ${isMaximized ? "maximized" : ""}`} initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 40 }}>
-            {/* --- HEADER  --- */}
+            {/* --- HEADER --- */}
             <div className="chatbot-header">
               <div className="chatbot-header-left">
                 <button className="hamburger-btn" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
@@ -207,7 +202,6 @@ export default function ChatBotUI() {
                 <div className="chatbot-avatar">🤖</div>
                 <span className="chatbot-title">Learning Buddy</span>
               </div>
-
               <div className="chatbot-header-right">
                 <AnimatePresence>
                   {showEmailInput && (
@@ -215,32 +209,26 @@ export default function ChatBotUI() {
                       initial={{ width: 0, opacity: 0 }}
                       animate={{ width: 160, opacity: 1 }}
                       exit={{ width: 0, opacity: 0 }}
-                      transition={{ duration: 0.2 }}
                       type="email"
                       placeholder="Email kamu..."
-                      className="email-input-field" // Class CSS Baru
+                      className="email-input-field"
                       value={userEmail}
                       onChange={(e) => setUserEmail(e.target.value)}
                     />
                   )}
                 </AnimatePresence>
-
-                <button className={`email-toggle-btn ${userEmail ? "has-email" : ""}`} onClick={() => setShowEmailInput(!showEmailInput)} title={userEmail ? `Email: ${userEmail}` : "Set Email"}>
+                <button className={`email-toggle-btn ${userEmail ? "has-email" : ""}`} onClick={() => setShowEmailInput(!showEmailInput)}>
                   @
                 </button>
-
-                {/* TOMBOL EXPAND */}
-                <button className="expand-btn" onClick={() => setIsMaximized(!isMaximized)} title={isMaximized ? "Kecilkan" : "Perbesar"}>
+                <button className="expand-btn" onClick={() => setIsMaximized(!isMaximized)}>
                   {isMaximized ? "↙" : "↗"}
                 </button>
-
                 <button className="header-close-btn" onClick={() => setOpen(false)}>
                   ✕
                 </button>
               </div>
             </div>
 
-            {/* BODY */}
             <div className="chatbot-body-container">
               {/* SIDEBAR */}
               <div className={`chatbot-sidebar ${isSidebarOpen ? "open" : ""}`}>
@@ -272,8 +260,11 @@ export default function ChatBotUI() {
                       </div>
                     ) : (
                       <div className={`chatbot-bubble ${msg.sender}`}>
-                        <div dangerouslySetInnerHTML={{ __html: msg.text }}></div>
-                        {/* RENDER TOMBOL QUIZ */}
+                        {/* --- PERUBAHAN DISINI: GANTI dangerouslySetInnerHTML --- */}
+                        <div className="markdown-content">
+                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.text}</ReactMarkdown>
+                        </div>
+
                         {msg.isQuiz && msg.options && msg.options.length > 0 && (
                           <div className="quiz-options-container">
                             {msg.options.map((opt) => (
@@ -292,7 +283,6 @@ export default function ChatBotUI() {
               </div>
             </div>
 
-            {/* INPUT */}
             <div className="chatbot-input">
               <input value={input} onChange={(e) => setInput(e.target.value)} onKeyPress={handleKeyPress} placeholder="Ketik pesan..." />
               <button onClick={() => sendMessage()}>Send</button>

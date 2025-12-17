@@ -105,7 +105,52 @@ body {
 .chatbot-message-row.bot {
   align-items: flex-start;
 }
+/* markdown */
+/* Styling Tabel Markdown */
+.markdown-content table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 10px 0;
+  font-size: 0.9em;
+  min-width: 200px;
+  background: white;
+  color: black;
+  border-radius: 8px;
+  overflow: hidden;
+}
 
+.markdown-content th {
+  background-color: #4a90e2;
+  color: white;
+  text-align: left;
+  padding: 8px;
+}
+
+.markdown-content td {
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+}
+
+.markdown-content tr:last-child td {
+  border-bottom: none;
+}
+
+/* Biar bubble chat bot bisa lebar kalo ada tabel */
+.chatbot-bubble.bot {
+  max-width: 85%; /* Naikin dikit biar tabel lega */
+  overflow-x: auto; /* Kalo tabel kepanjangan bisa di-scroll */
+}
+
+/* Styling Bold dan Italic di Markdown */
+.markdown-content b,
+.markdown-content strong {
+  font-weight: bold;
+}
+
+.markdown-content i,
+.markdown-content em {
+  font-style: italic;
+}
 /* Avatar kecil bot di area pesan */
 .bot-icon-small {
   width: 30px;
