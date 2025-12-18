@@ -96,6 +96,8 @@ body {
 .chatbot-message-row {
   display: flex;
   margin-bottom: 12px;
+  align-items: flex-start;
+  min-height: 0; /* KUNCI: bikin row gak punya minimum height */
 }
 
 .chatbot-message-row.user {
@@ -103,12 +105,32 @@ body {
 }
 
 .chatbot-message-row.bot {
-  align-items: flex-start;
+  justify-content: flex-start;
 }
+
 /* markdown */
 .markdown-content {
   overflow-x: auto;
   max-width: 100%;
+  display: inline-block; /* KUNCI: bikin markdown container inline */
+  width: 100%;
+}
+
+/* Reset margin default dari ReactMarkdown */
+.markdown-content > *:first-child {
+  margin-top: 0;
+}
+
+.markdown-content > *:last-child {
+  margin-bottom: 0;
+}
+
+.markdown-content p {
+  margin: 0 0 8px 0;
+}
+
+.markdown-content p:last-child {
+  margin-bottom: 0;
 }
 
 /* Styling Tabel Markdown */
@@ -158,6 +180,7 @@ body {
   width: 30px;
   height: 30px;
   min-width: 30px;
+  min-height: 30px; /* TAMBAHAN: bikin avatar gak stretch */
   flex-shrink: 0;
   border-radius: 50%;
   background: #2d3447;
@@ -167,27 +190,41 @@ body {
   justify-content: center;
   font-size: 15px;
   margin-right: 8px;
+  align-self: flex-start; /* KUNCI: bikin avatar nempel atas */
 }
 
 /* Bubble pesan */
 .chatbot-bubble {
-  max-width: 80%;
-  padding: 9px 12px;
-  border-radius: 14px;
+  max-width: 70%;
+  padding: 8px 12px;
+  border-radius: 12px;
   font-size: 13px;
-  line-height: 1.4;
+  line-height: 1.45;
+  width: fit-content;
+  word-wrap: break-word;
+  display: inline-block; /* KUNCI: bikin bubble jadi inline */
+  vertical-align: top; /* KUNCI: bikin bubble align ke atas */
 }
 
 .chatbot-bubble.bot {
-  background: #e5e7eb;
-  color: #111827;
-  max-width: 85%; /* Naikin dikit biar tabel lega */
+  background: #ffffff;
+  color: #333;
+  max-width: 85%;
   overflow-x: auto;
+  white-space: pre-wrap;
+  line-height: 1.6;
+  padding: 12px 16px;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
 }
 
 .chatbot-bubble.user {
   background: #c1c5d0;
   color: #111827;
+  padding: 8px 12px;
+  font-size: 13px;
+  white-space: pre-wrap;
+  line-height: 1.6;
 }
 
 /* INPUT BAWAH */
@@ -233,7 +270,7 @@ body {
   cursor: pointer;
 }
 
-/* --- ANIMASI TYPING “...” --- */
+/* --- ANIMASI TYPING "..." --- */
 .typing-bubble {
   display: flex;
   align-items: center;
@@ -254,22 +291,6 @@ body {
 
 .typing-dot:nth-child(3) {
   animation-delay: 0.3s;
-}
-
-/* paragraf */
-.chatbot-bubble.bot {
-  background: #ffffff;
-  color: #333;
-  white-space: pre-wrap;
-  line-height: 1.6;
-  padding: 12px 16px;
-  border-radius: 14px;
-  max-width: 90%;
-}
-
-.chatbot-bubble.user {
-  white-space: pre-wrap;
-  line-height: 1.6;
 }
 
 /* --- UPDATE & TAMBAHAN --- */
@@ -342,10 +363,10 @@ body {
 
 /* --- MODE MAXIMIZED (UP SIZE) --- */
 .chatbot-widget.maximized {
-  width: 90vw; /* Lebar 90% layar */
-  height: 85vh; /* Tinggi 85% layar */
-  bottom: 5vh; /* Jarak dari bawah dikit */
-  right: 5vw; /* Jarak dari kanan dikit */
+  width: 90vw;
+  height: 85vh;
+  bottom: 5vh;
+  right: 5vw;
   border-radius: 16px;
 }
 
@@ -404,6 +425,11 @@ body {
   transform: translateY(-1px);
 }
 
+.quiz-option-btn:active {
+  background-color: #d1d9e6;
+  transform: translateY(1px);
+}
+
 .option-label {
   background-color: #007bff;
   color: white;
@@ -424,15 +450,10 @@ body {
   line-height: 1.4;
 }
 
-/* Bubble Chat Bot lebih lebar dikit buat opsi */
-.chatbot-bubble.bot {
-  max-width: 85%;
-}
-
 /* Container Body (Bungkus Sidebar + Messages) */
 .chatbot-body-container {
   flex: 1;
-  position: relative; /* Kunci! biar sidebar absolute patokannya ke sini */
+  position: relative;
   overflow: hidden;
   display: flex;
   background: #f5f7fa;
@@ -443,12 +464,12 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  width: 200px; /* Lebar sidebar */
+  width: 200px;
   height: 100%;
-  background: #232939; /* Warna sidebar agak gelap dikit dari header */
+  background: #232939;
   color: #fff;
   z-index: 10;
-  transform: translateX(-100%); /* Default sembunyi ke kiri */
+  transform: translateX(-100%);
   transition: transform 0.3s ease-in-out;
   display: flex;
   flex-direction: column;
@@ -457,7 +478,7 @@ body {
 }
 
 .chatbot-sidebar.open {
-  transform: translateX(0); /* Munculin */
+  transform: translateX(0);
 }
 
 /* Tombol New Chat */
@@ -546,64 +567,6 @@ body {
 .history-list::-webkit-scrollbar-thumb {
   background: #4b5563;
   border-radius: 4px;
-}
-
-/*  Quiz */
-.quiz-options-container {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: 12px;
-}
-
-.quiz-option-btn {
-  display: flex;
-  align-items: center;
-  background-color: #f0f4f8;
-  border: 1px solid #d1d9e6;
-  border-radius: 8px;
-  padding: 10px;
-  cursor: pointer;
-  text-align: left;
-  transition: all 0.2s ease;
-  font-family: inherit;
-  color: #333;
-}
-
-.quiz-option-btn:hover {
-  background-color: #e2e8f0;
-  border-color: #b0c4de;
-  transform: translateY(-1px);
-}
-
-.quiz-option-btn:active {
-  background-color: #d1d9e6;
-  transform: translateY(1px);
-}
-
-.option-label {
-  background-color: #007bff;
-  color: white;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: bold;
-  font-size: 12px;
-  margin-right: 10px;
-  flex-shrink: 0;
-}
-
-.option-text {
-  font-size: 14px;
-  line-height: 1.4;
-}
-
-/* Update Chat Bubble biar muat tombol */
-.chatbot-bubble.bot {
-  max-width: 85%; /* Lebarin dikit biar opsi muat */
 }
 
 @keyframes typingBlink {
