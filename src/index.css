@@ -106,10 +106,17 @@ body {
   align-items: flex-start;
 }
 /* markdown */
+.markdown-content {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
 /* Styling Tabel Markdown */
 .markdown-content table {
   border-collapse: collapse;
-  width: 100%;
+  display: block;
+  width: max-content;
+  max-width: 100%;
   margin: 10px 0;
   font-size: 0.9em;
   min-width: 200px;
@@ -135,12 +142,6 @@ body {
   border-bottom: none;
 }
 
-/* Biar bubble chat bot bisa lebar kalo ada tabel */
-.chatbot-bubble.bot {
-  max-width: 85%; /* Naikin dikit biar tabel lega */
-  overflow-x: auto; /* Kalo tabel kepanjangan bisa di-scroll */
-}
-
 /* Styling Bold dan Italic di Markdown */
 .markdown-content b,
 .markdown-content strong {
@@ -151,6 +152,7 @@ body {
 .markdown-content em {
   font-style: italic;
 }
+
 /* Avatar kecil bot di area pesan */
 .bot-icon-small {
   width: 30px;
@@ -179,6 +181,8 @@ body {
 .chatbot-bubble.bot {
   background: #e5e7eb;
   color: #111827;
+  max-width: 85%; /* Naikin dikit biar tabel lega */
+  overflow-x: auto;
 }
 
 .chatbot-bubble.user {
